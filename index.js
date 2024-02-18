@@ -30,8 +30,32 @@ app.post("/todo", (req, res) => {
     title: req.body.title,
     description: req.body.description,
   };
-  todos.push(newTodo);
   res.status(201).json(newTodo);
+});
+
+app.put("/todo/:id", (req, res) => {
+  const todoIndex = todos.findIndex(
+    (todo) => todo.id === parseInt(req.params.id)
+  );
+  if (todoIndex === -1) {
+    res.status(404).send();
+  } else {
+    todos[todoIndex].title = req.body.title;
+    todos[todoIndex].description = req.body.description;
+    res.json(todos[todoIndex]);
+  }
+});
+
+app.delete("/todo/:id", (req, res) => {
+  const todoIndex = todos.findIndex(
+    (todo) => todo.id === parseInt(req.params.id)
+  );
+  if (todoIndex === -1) {
+    res.status(404).send();
+  } else {
+    todos.splice(todoIndex, 1);
+    res.status(200).send();
+  }
 });
 
 app.listen(3000);
